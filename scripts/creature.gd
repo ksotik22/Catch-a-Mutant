@@ -16,10 +16,8 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
     if caught:
         return
-
     if not is_on_floor():
         velocity += get_gravity() * delta
-
     var flat_target := Vector3(target.x, global_position.y, target.z)
     var direction := global_position.direction_to(flat_target)
     if global_position.distance_to(flat_target) > 0.6:
@@ -33,7 +31,6 @@ func _physics_process(delta: float) -> void:
         wait_time -= delta
         if wait_time <= 0.0:
             _pick_target()
-
     move_and_slide()
 
 func _pick_target() -> void:
@@ -46,5 +43,8 @@ func catch_creature() -> void:
     if caught:
         return
     caught = true
+    var state = get_tree().current_scene.get_node_or_null("GameState")
+    if state != null:
+        state.add_catch()
     print("Пойман: ", creature_name)
     queue_free()
