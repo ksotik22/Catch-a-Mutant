@@ -1,8 +1,10 @@
-[gd_scene load_steps=21 format=3]
+[gd_scene load_steps=23 format=3]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/creature.gd" id="2_creature"]
 [ext_resource type="Script" path="res://scripts/mobile_controls.gd" id="3_mobile"]
+[ext_resource type="Script" path="res://scripts/game_state.gd" id="4_state"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="5_hud"]
 
 [sub_resource type="StandardMaterial3D" id="Grass"]
 albedo_color = Color(0.28, 0.72, 0.3, 1)
@@ -71,6 +73,8 @@ radius = 0.65
 height = 1.2
 
 [node name="Main" type="Node3D"]
+[node name="GameState" type="Node" parent="."]
+script = ExtResource("4_state")
 [node name="Sun" type="DirectionalLight3D" parent="."]
 rotation_degrees = Vector3(-55, -35, 0)
 light_energy = 1.2
@@ -139,6 +143,16 @@ position = Vector3(0, 1.4, 0)
 position = Vector3(0, 2.5, 6)
 rotation_degrees = Vector3(-15, 180, 0)
 current = true
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("5_hud")
+[node name="CatchLabel" type="Label" parent="HUD"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 250.0
+offset_bottom = 70.0
+theme_override_font_sizes/font_size = 28
+text = "Поймано: 0"
 
 [node name="MobileControls" type="Control" parent="."]
 layout_mode = 3
