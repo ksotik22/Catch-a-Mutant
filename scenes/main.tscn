@@ -1,0 +1,69 @@
+[gd_scene load_steps=8 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Grass"]
+albedo_color = Color(0.32, 0.72, 0.28, 1)
+
+[sub_resource type="CylinderMesh" id="IslandMesh"]
+top_radius = 22.0
+bottom_radius = 25.0
+height = 2.5
+radial_segments = 32
+material = SubResource("Grass")
+
+[sub_resource type="StandardMaterial3D" id="Water"]
+albedo_color = Color(0.05, 0.55, 0.85, 1)
+roughness = 0.3
+
+[sub_resource type="PlaneMesh" id="WaterMesh"]
+size = Vector2(120, 120)
+material = SubResource("Water")
+
+[sub_resource type="StandardMaterial3D" id="White"]
+albedo_color = Color(0.95, 0.9, 0.78, 1)
+
+[sub_resource type="CylinderMesh" id="TowerMesh"]
+top_radius = 1.4
+bottom_radius = 2.2
+height = 9.0
+radial_segments = 16
+material = SubResource("White")
+
+[sub_resource type="BoxMesh" id="PlayerMesh"]
+size = Vector3(1, 1.8, 0.8)
+
+[node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -35, 0)
+shadow_enabled = true
+
+[node name="Water" type="MeshInstance3D" parent="."]
+position = Vector3(0, -1.5, 0)
+mesh = SubResource("WaterMesh")
+
+[node name="Island" type="MeshInstance3D" parent="."]
+position = Vector3(0, -1, 0)
+mesh = SubResource("IslandMesh")
+
+[node name="Lighthouse" type="MeshInstance3D" parent="."]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("TowerMesh")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+position = Vector3(0, 1, 9)
+script = ExtResource("1_player")
+
+[node name="Mesh" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("PlayerMesh")
+
+[node name="CameraPivot" type="Node3D" parent="Player"]
+position = Vector3(0, 1.4, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Player/CameraPivot"]
+position = Vector3(0, 3, 7)
+rotation_degrees = Vector3(-15, 180, 0)
+current = true
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
