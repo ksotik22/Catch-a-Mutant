@@ -7,12 +7,16 @@ extends CharacterBody3D
 var origin := Vector3.ZERO
 var target := Vector3.ZERO
 var wait_time := 0.0
+var caught := false
 
 func _ready() -> void:
     origin = global_position
     _pick_target()
 
 func _physics_process(delta: float) -> void:
+    if caught:
+        return
+
     if not is_on_floor():
         velocity += get_gravity() * delta
 
@@ -37,3 +41,10 @@ func _pick_target() -> void:
     var distance := randf_range(2.0, wander_radius)
     target = origin + Vector3(cos(angle) * distance, 0, sin(angle) * distance)
     wait_time = randf_range(0.5, 1.8)
+
+func catch_creature() -> void:
+    if caught:
+        return
+    caught = true
+    print("Пойман: ", creature_name)
+    queue_free()
