@@ -20,6 +20,8 @@ func _install_visual_upgrade() -> void:
     get_tree().current_scene.add_child(visual_upgrade)
     var concept_upgrade = preload("res://scripts/concept_upgrade.gd").new()
     get_tree().current_scene.add_child(concept_upgrade)
+    var mechanics = preload("res://scripts/world_mechanics.gd").new()
+    get_tree().current_scene.add_child(mechanics)
     await get_tree().process_frame
     var animation_controller = preload("res://scripts/player_animation.gd").new()
     animation_controller.name = "PlayerAnimation"
