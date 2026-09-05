@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3]
+[gd_scene load_steps=31 format=3]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/creature.gd" id="2_creature"]
@@ -7,61 +7,113 @@
 [ext_resource type="Script" path="res://scripts/hud.gd" id="5_hud"]
 
 [sub_resource type="StandardMaterial3D" id="Grass"]
-albedo_color = Color(0.28, 0.72, 0.3, 1)
+albedo_color = Color(0.22, 0.68, 0.25, 1)
 roughness = 0.9
 [sub_resource type="StandardMaterial3D" id="Water"]
-albedo_color = Color(0.03, 0.55, 0.86, 1)
-roughness = 0.25
+albedo_color = Color(0.02, 0.48, 0.82, 1)
+metallic = 0.05
+roughness = 0.18
 [sub_resource type="StandardMaterial3D" id="Sand"]
-albedo_color = Color(0.95, 0.76, 0.38, 1)
+albedo_color = Color(0.96, 0.73, 0.34, 1)
+roughness = 0.95
+[sub_resource type="StandardMaterial3D" id="Stone"]
+albedo_color = Color(0.32, 0.36, 0.39, 1)
+roughness = 1.0
 [sub_resource type="StandardMaterial3D" id="White"]
-albedo_color = Color(0.95, 0.92, 0.8, 1)
+albedo_color = Color(0.96, 0.94, 0.82, 1)
 [sub_resource type="StandardMaterial3D" id="Red"]
-albedo_color = Color(0.85, 0.12, 0.08, 1)
+albedo_color = Color(0.9, 0.12, 0.07, 1)
+[sub_resource type="StandardMaterial3D" id="Blue"]
+albedo_color = Color(0.08, 0.38, 0.78, 1)
 [sub_resource type="StandardMaterial3D" id="Wood"]
-albedo_color = Color(0.38, 0.18, 0.06, 1)
+albedo_color = Color(0.42, 0.2, 0.07, 1)
 [sub_resource type="StandardMaterial3D" id="Palm"]
-albedo_color = Color(0.08, 0.55, 0.16, 1)
+albedo_color = Color(0.05, 0.52, 0.13, 1)
+[sub_resource type="StandardMaterial3D" id="PathMat"]
+albedo_color = Color(0.88, 0.61, 0.3, 1)
 [sub_resource type="StandardMaterial3D" id="CreatureMat"]
-albedo_color = Color(0.95, 0.55, 0.16, 1)
+albedo_color = Color(0.98, 0.52, 0.12, 1)
+[sub_resource type="StandardMaterial3D" id="PlayerMat"]
+albedo_color = Color(0.12, 0.48, 0.82, 1)
+
+[sub_resource type="CylinderMesh" id="RockBaseMesh"]
+top_radius = 21.5
+bottom_radius = 24.5
+height = 2.2
+radial_segments = 20
+material = SubResource("Stone")
+[sub_resource type="CylinderMesh" id="SandMesh"]
+top_radius = 21.8
+bottom_radius = 22.5
+height = 0.65
+radial_segments = 24
+material = SubResource("Sand")
 [sub_resource type="CylinderMesh" id="IslandMesh"]
-top_radius = 22.0
-bottom_radius = 24.0
-height = 2.0
-radial_segments = 32
+top_radius = 19.8
+bottom_radius = 20.7
+height = 0.65
+radial_segments = 24
 material = SubResource("Grass")
 [sub_resource type="CylinderShape3D" id="IslandShape"]
-radius = 22.0
+radius = 20.0
 height = 2.0
 [sub_resource type="PlaneMesh" id="WaterMesh"]
-size = Vector2(120, 120)
+size = Vector2(140, 140)
 material = SubResource("Water")
 [sub_resource type="CylinderMesh" id="TowerMesh"]
-top_radius = 1.5
-bottom_radius = 2.2
-height = 9.0
+top_radius = 1.45
+bottom_radius = 2.15
+height = 8.5
 radial_segments = 16
 material = SubResource("White")
+[sub_resource type="CylinderMesh" id="TowerBandMesh"]
+top_radius = 1.73
+bottom_radius = 1.82
+height = 1.35
+radial_segments = 16
+material = SubResource("Red")
+[sub_resource type="CylinderMesh" id="TopMesh"]
+top_radius = 1.8
+bottom_radius = 1.8
+height = 0.45
+radial_segments = 16
+material = SubResource("Red")
 [sub_resource type="BoxMesh" id="PlayerMesh"]
-size = Vector3(1, 1.8, 0.8)
+size = Vector3(0.9, 1.5, 0.65)
+material = SubResource("PlayerMat")
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.5
 height = 1.8
 [sub_resource type="BoxMesh" id="ShopMesh"]
-size = Vector3(4, 2.8, 3)
+size = Vector3(4.5, 2.7, 3.2)
 material = SubResource("Sand")
+[sub_resource type="BoxMesh" id="RoofMesh"]
+size = Vector3(5.0, 0.45, 3.7)
+material = SubResource("Red")
+[sub_resource type="BoxMesh" id="RoofBlueMesh"]
+size = Vector3(5.0, 0.45, 3.7)
+material = SubResource("Blue")
+[sub_resource type="BoxMesh" id="PathMesh"]
+size = Vector3(4.0, 0.12, 14.0)
+material = SubResource("PathMat")
 [sub_resource type="CylinderMesh" id="TrunkMesh"]
 top_radius = 0.22
-bottom_radius = 0.35
+bottom_radius = 0.38
 height = 4.0
-radial_segments = 8
+radial_segments = 7
 material = SubResource("Wood")
 [sub_resource type="SphereMesh" id="LeavesMesh"]
 radius = 1.5
-height = 1.6
+height = 1.35
 radial_segments = 8
 rings = 4
 material = SubResource("Palm")
+[sub_resource type="SphereMesh" id="RockMesh"]
+radius = 1.0
+height = 1.5
+radial_segments = 7
+rings = 4
+material = SubResource("Stone")
 [sub_resource type="SphereMesh" id="CreatureMesh"]
 radius = 0.75
 height = 1.25
@@ -77,44 +129,70 @@ height = 1.4
 script = ExtResource("4_state")
 [node name="Sun" type="DirectionalLight3D" parent="."]
 rotation_degrees = Vector3(-55, -35, 0)
-light_energy = 1.2
+light_energy = 1.35
 shadow_enabled = true
 [node name="Water" type="MeshInstance3D" parent="."]
-position = Vector3(0, -1.2, 0)
+position = Vector3(0, -1.55, 0)
 mesh = SubResource("WaterMesh")
+[node name="RockBase" type="MeshInstance3D" parent="."]
+position = Vector3(0, -1.45, 0)
+mesh = SubResource("RockBaseMesh")
+[node name="Beach" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.48, 0)
+mesh = SubResource("SandMesh")
 [node name="Island" type="StaticBody3D" parent="."]
-position = Vector3(0, -1, 0)
+position = Vector3(0, -0.15, 0)
 [node name="Mesh" type="MeshInstance3D" parent="Island"]
 mesh = SubResource("IslandMesh")
 [node name="Collision" type="CollisionShape3D" parent="Island"]
+position = Vector3(0, -0.85, 0)
 shape = SubResource("IslandShape")
+[node name="Path" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.22, 7)
+mesh = SubResource("PathMesh")
 [node name="Lighthouse" type="MeshInstance3D" parent="."]
-position = Vector3(0, 4.5, 0)
+position = Vector3(0, 4.45, 0)
 mesh = SubResource("TowerMesh")
+[node name="LighthouseBand1" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.0, 0)
+mesh = SubResource("TowerBandMesh")
+[node name="LighthouseBand2" type="MeshInstance3D" parent="."]
+position = Vector3(0, 6.0, 0)
+scale = Vector3(0.82, 1, 0.82)
+mesh = SubResource("TowerBandMesh")
 [node name="LighthouseTop" type="MeshInstance3D" parent="."]
-position = Vector3(0, 9.3, 0)
-mesh = SubResource("LeavesMesh")
-scale = Vector3(1.2, 0.45, 1.2)
-material_override = SubResource("Red")
+position = Vector3(0, 8.9, 0)
+mesh = SubResource("TopMesh")
 [node name="SellShop" type="MeshInstance3D" parent="."]
-position = Vector3(-7, 1.4, 1)
+position = Vector3(-7, 1.55, 1.5)
 mesh = SubResource("ShopMesh")
+[node name="SellRoof" type="MeshInstance3D" parent="."]
+position = Vector3(-7, 3.05, 1.5)
+rotation_degrees = Vector3(0, 0, -5)
+mesh = SubResource("RoofMesh")
 [node name="UpgradeShop" type="MeshInstance3D" parent="."]
-position = Vector3(7, 1.4, 1)
+position = Vector3(7, 1.55, 1.5)
 mesh = SubResource("ShopMesh")
+[node name="UpgradeRoof" type="MeshInstance3D" parent="."]
+position = Vector3(7, 3.05, 1.5)
+rotation_degrees = Vector3(0, 0, 5)
+mesh = SubResource("RoofBlueMesh")
+
 [node name="Palm1" type="Node3D" parent="."]
 position = Vector3(-12, 2, -8)
 [node name="Trunk" type="MeshInstance3D" parent="Palm1"]
+rotation_degrees = Vector3(0, 0, -6)
 mesh = SubResource("TrunkMesh")
 [node name="Leaves" type="MeshInstance3D" parent="Palm1"]
-position = Vector3(0, 2.2, 0)
+position = Vector3(-0.25, 2.2, 0)
 mesh = SubResource("LeavesMesh")
 [node name="Palm2" type="Node3D" parent="."]
 position = Vector3(13, 2, -6)
 [node name="Trunk" type="MeshInstance3D" parent="Palm2"]
+rotation_degrees = Vector3(0, 0, 7)
 mesh = SubResource("TrunkMesh")
 [node name="Leaves" type="MeshInstance3D" parent="Palm2"]
-position = Vector3(0, 2.2, 0)
+position = Vector3(0.25, 2.2, 0)
 mesh = SubResource("LeavesMesh")
 [node name="Palm3" type="Node3D" parent="."]
 position = Vector3(-14, 2, 8)
@@ -123,6 +201,28 @@ mesh = SubResource("TrunkMesh")
 [node name="Leaves" type="MeshInstance3D" parent="Palm3"]
 position = Vector3(0, 2.2, 0)
 mesh = SubResource("LeavesMesh")
+[node name="Palm4" type="Node3D" parent="."]
+position = Vector3(14, 2, 9)
+[node name="Trunk" type="MeshInstance3D" parent="Palm4"]
+rotation_degrees = Vector3(0, 0, -8)
+mesh = SubResource("TrunkMesh")
+[node name="Leaves" type="MeshInstance3D" parent="Palm4"]
+position = Vector3(-0.3, 2.2, 0)
+mesh = SubResource("LeavesMesh")
+[node name="Rock1" type="MeshInstance3D" parent="."]
+position = Vector3(-16, 0.6, -2)
+rotation_degrees = Vector3(0, 25, 0)
+scale = Vector3(1.5, 0.8, 1.1)
+mesh = SubResource("RockMesh")
+[node name="Rock2" type="MeshInstance3D" parent="."]
+position = Vector3(15, 0.5, 5)
+scale = Vector3(1.1, 0.65, 1.5)
+mesh = SubResource("RockMesh")
+[node name="Rock3" type="MeshInstance3D" parent="."]
+position = Vector3(-8, 0.45, -15)
+scale = Vector3(0.8, 0.55, 1.0)
+mesh = SubResource("RockMesh")
+
 [node name="CatLoaf" type="CharacterBody3D" parent="."]
 position = Vector3(7, 1, -8)
 script = ExtResource("2_creature")
@@ -153,7 +253,6 @@ offset_right = 250.0
 offset_bottom = 70.0
 theme_override_font_sizes/font_size = 28
 text = "Поймано: 0"
-
 [node name="MobileControls" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
