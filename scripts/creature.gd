@@ -119,7 +119,19 @@ func _apply_mutation_visual() -> void:
         return
     for child in get_children():
         if child is MeshInstance3D:
-            child.modulate = mutation_color
+            var mesh_instance := child as MeshInstance3D
+            var material := StandardMaterial3D.new()
+            material.albedo_color = mutation_color
+            material.roughness = 0.7
+            mesh_instance.material_override = material
+        elif child is Node3D:
+            for part in child.get_children():
+                if part is MeshInstance3D:
+                    var nested_mesh := part as MeshInstance3D
+                    var nested_material := StandardMaterial3D.new()
+                    nested_material.albedo_color = mutation_color
+                    nested_material.roughness = 0.7
+                    nested_mesh.material_override = nested_material
 
 func _update_name_label() -> void:
     if name_label == null:
