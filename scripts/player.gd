@@ -18,6 +18,8 @@ func _ready() -> void:
 func _install_visual_upgrade() -> void:
     var visual_upgrade = preload("res://scripts/visual_upgrade.gd").new()
     get_tree().current_scene.add_child(visual_upgrade)
+    var concept_upgrade = preload("res://scripts/concept_upgrade.gd").new()
+    get_tree().current_scene.add_child(concept_upgrade)
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
