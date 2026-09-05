@@ -24,6 +24,8 @@ func _install_visual_upgrade() -> void:
     get_tree().current_scene.add_child(mechanics)
     var mutant_spawner = preload("res://scripts/mutant_spawner.gd").new()
     get_tree().current_scene.add_child(mutant_spawner)
+    var shop_label_style = preload("res://scripts/shop_label_style.gd").new()
+    get_tree().current_scene.add_child(shop_label_style)
     await get_tree().process_frame
     var animation_controller = preload("res://scripts/player_animation.gd").new()
     animation_controller.name = "PlayerAnimation"
