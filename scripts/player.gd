@@ -20,6 +20,10 @@ func _install_visual_upgrade() -> void:
     get_tree().current_scene.add_child(visual_upgrade)
     var concept_upgrade = preload("res://scripts/concept_upgrade.gd").new()
     get_tree().current_scene.add_child(concept_upgrade)
+    await get_tree().process_frame
+    var animation_controller = preload("res://scripts/player_animation.gd").new()
+    animation_controller.name = "PlayerAnimation"
+    add_child(animation_controller)
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
