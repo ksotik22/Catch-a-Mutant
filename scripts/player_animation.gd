@@ -1,8 +1,8 @@
 extends Node
 
 var player: CharacterBody3D
-var t := 0.0
-var base := {}
+var t: float = 0.0
+var base: Dictionary = {}
 
 func _ready() -> void:
     player = get_parent() as CharacterBody3D
@@ -17,11 +17,11 @@ func _capture_parts() -> void:
 func _physics_process(delta: float) -> void:
     if base.is_empty():
         return
-    var moving := Vector2(player.velocity.x, player.velocity.z).length() > 0.5 and player.is_on_floor()
-    var airborne := not player.is_on_floor()
+    var moving: bool = Vector2(player.velocity.x, player.velocity.z).length() > 0.5 and player.is_on_floor()
+    var airborne: bool = not player.is_on_floor()
     t += delta * (10.0 if moving else 3.0)
-    var swing := sin(t) * (0.75 if moving else 0.06)
-    var bob := abs(sin(t * 2.0)) * (0.09 if moving else 0.025)
+    var swing: float = sin(t) * (0.75 if moving else 0.06)
+    var bob: float = absf(sin(t * 2.0)) * (0.09 if moving else 0.025)
     _pose("LeftArm", Vector3(swing, 0, 0), Vector3(0, bob, 0))
     _pose("RightArm", Vector3(-swing, 0, 0), Vector3(0, bob, 0))
     _pose("LeftLeg", Vector3(-swing * 0.7, 0, 0), Vector3(0, bob * 0.35, 0))
