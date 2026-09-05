@@ -18,9 +18,20 @@ func _ready() -> void:
     collision_layer = 4
     collision_mask = 1
     origin = global_position
+    _upgrade_collision()
     _ensure_name_label()
     _roll_rarity()
     _pick_target()
+
+func _upgrade_collision() -> void:
+    # Also enlarges the original Cat Loaf hitbox from main.tscn.
+    var collision := get_node_or_null("Collision") as CollisionShape3D
+    if collision != null:
+        var shape := CapsuleShape3D.new()
+        shape.radius = 1.05
+        shape.height = 2.25
+        collision.shape = shape
+        collision.position.y = 0.75
 
 func _ensure_name_label() -> void:
     for child in get_children():
@@ -29,12 +40,12 @@ func _ensure_name_label() -> void:
             break
     if name_label == null:
         name_label = Label3D.new()
-        name_label.position = Vector3(0, 2.0, 0)
-        name_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-        name_label.no_depth_test = false
-        name_label.fixed_size = false
-        name_label.pixel_size = 0.0045
         add_child(name_label)
+    name_label.position = Vector3(0, 2.15, 0)
+    name_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+    name_label.no_depth_test = false
+    name_label.fixed_size = false
+    name_label.pixel_size = 0.0032
 
 func _roll_rarity() -> void:
     var roll := randf() * 100.0
@@ -63,13 +74,12 @@ func _roll_rarity() -> void:
 func _update_name_label() -> void:
     if name_label == null:
         return
-    name_label.text = "%s\n%s  x%d" % [creature_name, rarity_name, rarity_multiplier]
+    name_label.text = "%s\n%s  •  x%d" % [creature_name, rarity_name, rarity_multiplier]
     name_label.modulate = rarity_color
-    name_label.font_size = 28
-    name_label.outline_modulate = Color("20242b")
-    name_label.outline_size = 5
-    name_label.fixed_size = false
-    name_label.pixel_size = 0.0045
+    name_label.font_size = 24
+    name_label.outline_modulate = Color("161b22")
+    name_label.outline_size = 4
+    name_label.pixel_size = 0.0032
 
 func can_be_caught(net_level: int) -> bool:
     return net_level >= required_net_level and not caught
