@@ -47,4 +47,17 @@ func catch_creature() -> void:
     if state != null:
         state.add_catch()
     print("Пойман: ", creature_name)
-    queue_free()
+    _respawn_after_delay()
+
+func _respawn_after_delay() -> void:
+    visible = false
+    collision_layer = 0
+    collision_mask = 0
+    velocity = Vector3.ZERO
+    await get_tree().create_timer(5.0).timeout
+    global_position = origin
+    collision_layer = 4
+    collision_mask = 1
+    visible = true
+    caught = false
+    _pick_target()
