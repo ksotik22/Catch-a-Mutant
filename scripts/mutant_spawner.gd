@@ -31,7 +31,7 @@ func mesh_sphere(parent: Node3D, pos: Vector3, scale_: Vector3, material: Materi
     n.scale = scale_
     parent.add_child(n)
 
-func make_mutant(name_: String, pos: Vector3, body_color: String, accent_color: String, kind: int, speed_: float) -> CharacterBody3D:
+func make_mutant(name_: String, pos: Vector3, body_color: String, accent_color: String, kind: int, speed_: float, required_level: int) -> CharacterBody3D:
     var body := CharacterBody3D.new()
     body.name = name_.replace(" ", "")
     body.position = pos
@@ -41,6 +41,7 @@ func make_mutant(name_: String, pos: Vector3, body_color: String, accent_color: 
     body.set("creature_name", name_)
     body.set("wander_speed", speed_)
     body.set("wander_radius", 4.5)
+    body.set("required_net_level", required_level)
 
     var collision := CollisionShape3D.new()
     var shape := CapsuleShape3D.new()
@@ -81,18 +82,6 @@ func make_mutant(name_: String, pos: Vector3, body_color: String, accent_color: 
             mesh_box(body, Vector3(-0.35,0.25,0), Vector3(0.2,0.65,0.2), accent)
             mesh_box(body, Vector3(0.35,0.25,0), Vector3(0.2,0.65,0.2), accent)
 
-    var label := Label3D.new()
-    label.text = name_
-    label.position = Vector3(0, 2.05, 0)
-    label.font_size = 18
-    label.modulate = Color("fff4d6")
-    label.outline_modulate = Color("20242b")
-    label.outline_size = 6
-    label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-    label.no_depth_test = false
-    label.fixed_size = true
-    label.pixel_size = 0.0014
-    body.add_child(label)
     root.add_child(body)
     return body
 
@@ -108,12 +97,12 @@ func spawn_all() -> void:
     root.add_child(marker)
 
     await get_tree().create_timer(5.0).timeout
-    make_mutant("Бананчик", Vector3(-10,1.0,-5), "f2cf43", "7abf45", 0, 2.0)
+    make_mutant("Бананчик", Vector3(-10,1.0,-5), "f2cf43", "7abf45", 0, 2.0, 1)
     await get_tree().create_timer(5.0).timeout
-    make_mutant("Краб Бандит", Vector3(10,1.0,-5), "dc5847", "8e2e32", 1, 2.7)
+    make_mutant("Краб Бандит", Vector3(10,1.0,-5), "dc5847", "8e2e32", 1, 2.7, 2)
     await get_tree().create_timer(5.0).timeout
-    make_mutant("Жабыч Турбо", Vector3(-11,1.0,10), "56b84b", "2d7693", 2, 4.2)
+    make_mutant("Жабыч Турбо", Vector3(-11,1.0,10), "56b84b", "2d7693", 2, 4.2, 2)
     await get_tree().create_timer(5.0).timeout
-    make_mutant("Акулыч на ножках", Vector3(11,1.0,10), "5a91ad", "e5c28c", 3, 3.4)
+    make_mutant("Акулыч на ножках", Vector3(11,1.0,10), "5a91ad", "e5c28c", 3, 3.4, 3)
     await get_tree().create_timer(5.0).timeout
-    make_mutant("Кокосыч", Vector3(13,1.0,0), "825435", "55a645", 4, 1.7)
+    make_mutant("Кокосыч", Vector3(13,1.0,0), "825435", "55a645", 4, 1.7, 1)
