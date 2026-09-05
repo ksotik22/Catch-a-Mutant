@@ -153,7 +153,6 @@ func _physics_process(delta: float) -> void:
         return
     if not is_on_floor():
         velocity += get_gravity() * delta
-
     var fleeing: bool = false
     if player != null:
         var distance_to_player: float = global_position.distance_to(player.global_position)
@@ -168,7 +167,6 @@ func _physics_process(delta: float) -> void:
             velocity.z = away.z * wander_speed * flee_bonus
             if away.length() > 0.1:
                 rotation.y = atan2(away.x, away.z)
-
     if not fleeing:
         var flat_target := Vector3(target.x, global_position.y, target.z)
         var direction := global_position.direction_to(flat_target)
@@ -197,9 +195,17 @@ func catch_creature(net_level: int = 1) -> bool:
     caught = true
     var state = get_tree().current_scene.get_node_or_null("GameState")
     var value: int = 10 * rarity_multiplier * mutation_multiplier * zone_multiplier
+    var income: int = max(1, int(ceil(float(value) / 10.0)))
+    var data := {
+        "name": creature_name,
+        "rarity": rarity_name,
+        "mutation": mutation_name,
+        "income": income,
+        "value": value
+    }
     if state != null:
-        state.add_catch(value)
-    print("Пойман: ", creature_name, " [", rarity_name, "] ", mutation_name, " = ", value)
+        state.add_catch(value, data)
+    print("Пойман: ", creature_name, " | доход ", income, "/сек")
     _respawn_after_delay()
     return true
 
