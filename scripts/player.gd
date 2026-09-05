@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 @export var speed := 7.0
-@export var jump_velocity := 7.0
+@export var jump_velocity := 4.5
 @export var mouse_sensitivity := 0.003
 @export var net_scene: PackedScene = preload("res://scenes/net.tscn")
 
@@ -52,8 +52,9 @@ func _physics_process(delta: float) -> void:
 func throw_net() -> void:
     var net = net_scene.instantiate()
     get_tree().current_scene.add_child(net)
-    net.global_position = global_position + Vector3(0, 1.1, 0) + (-global_transform.basis.z * 1.4)
-    net.direction = -global_transform.basis.z.normalized()
+    var aim_direction := -camera.global_transform.basis.z.normalized()
+    net.global_position = camera.global_position + aim_direction * 1.5
+    net.direction = aim_direction
 
 func mobile_jump() -> void:
     mobile_jump_requested = true
