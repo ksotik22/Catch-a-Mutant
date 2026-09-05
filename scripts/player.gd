@@ -13,6 +13,9 @@ var mobile_jump_requested := false
 func _ready() -> void:
     if not DisplayServer.is_touchscreen_available():
         Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+    call_deferred("_install_visual_upgrade")
+
+func _install_visual_upgrade() -> void:
     var visual_upgrade = preload("res://scripts/visual_upgrade.gd").new()
     get_tree().current_scene.add_child(visual_upgrade)
 
