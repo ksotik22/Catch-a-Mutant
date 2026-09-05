@@ -20,6 +20,8 @@ func _install_visual_upgrade() -> void:
     get_tree().current_scene.add_child(visual_upgrade)
     var concept_upgrade = preload("res://scripts/concept_upgrade.gd").new()
     get_tree().current_scene.add_child(concept_upgrade)
+    var map_expansion = preload("res://scripts/map_expansion.gd").new()
+    get_tree().current_scene.add_child(map_expansion)
     var mechanics = preload("res://scripts/world_mechanics.gd").new()
     get_tree().current_scene.add_child(mechanics)
     var mutant_spawner = preload("res://scripts/mutant_spawner.gd").new()
