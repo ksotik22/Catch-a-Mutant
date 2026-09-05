@@ -15,6 +15,8 @@ var rarity_color := Color("e8e8e8")
 var name_label: Label3D
 
 func _ready() -> void:
+    collision_layer = 4
+    collision_mask = 1
     origin = global_position
     _ensure_name_label()
     _roll_rarity()
