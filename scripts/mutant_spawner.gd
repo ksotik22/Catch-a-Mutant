@@ -83,15 +83,15 @@ func make_mutant(name_: String, pos: Vector3, body_color: String, accent_color: 
 
     var label := Label3D.new()
     label.text = name_
-    label.position = Vector3(0, 2.15, 0)
-    label.font_size = 26
+    label.position = Vector3(0, 2.05, 0)
+    label.font_size = 18
     label.modulate = Color("fff4d6")
     label.outline_modulate = Color("20242b")
-    label.outline_size = 12
+    label.outline_size = 6
     label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
     label.no_depth_test = false
     label.fixed_size = true
-    label.pixel_size = 0.0035
+    label.pixel_size = 0.0014
     body.add_child(label)
     root.add_child(body)
     return body
