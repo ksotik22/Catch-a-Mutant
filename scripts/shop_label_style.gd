@@ -10,12 +10,12 @@ func apply_style() -> void:
     if root == null:
         return
     for node in root.get_children():
-        if node is Label3D and (node.text == "МАГАЗИН" or node.text == "УЛУЧШЕНИЯ"):
-            node.font_size = 18
+        if node is Label3D and (node.text == "МАГАЗИН" or node.text == "УЛУЧШЕНИЯ" or node.text == "ПРОДАЖА"):
+            node.font_size = 30
             node.modulate = Color("fff4d6")
             node.outline_modulate = Color("20242b")
-            node.outline_size = 6
+            node.outline_size = 5
             node.billboard = BaseMaterial3D.BILLBOARD_ENABLED
             node.no_depth_test = false
-            node.fixed_size = true
-            node.pixel_size = 0.0014
+            node.fixed_size = false
+            node.pixel_size = 0.0055
