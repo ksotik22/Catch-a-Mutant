@@ -28,6 +28,8 @@ func _install_visual_upgrade() -> void:
     get_tree().current_scene.add_child(mutant_spawner)
     var shop_label_style = preload("res://scripts/shop_label_style.gd").new()
     get_tree().current_scene.add_child(shop_label_style)
+    var base_system = preload("res://scripts/base_system.gd").new()
+    get_tree().current_scene.add_child(base_system)
     await get_tree().process_frame
     var animation_controller = preload("res://scripts/player_animation.gd").new()
     animation_controller.name = "PlayerAnimation"
@@ -46,18 +48,12 @@ func _unhandled_input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
     if not is_on_floor():
         velocity += get_gravity() * delta
-
     if (Input.is_key_pressed(KEY_SPACE) or mobile_jump_requested) and is_on_floor():
         velocity.y = jump_velocity
     mobile_jump_requested = false
-
-    var input_dir := Vector2(
-        float(Input.is_key_pressed(KEY_D)) - float(Input.is_key_pressed(KEY_A)),
-        float(Input.is_key_pressed(KEY_S)) - float(Input.is_key_pressed(KEY_W))
-    )
+    var input_dir := Vector2(float(Input.is_key_pressed(KEY_D)) - float(Input.is_key_pressed(KEY_A)), float(Input.is_key_pressed(KEY_S)) - float(Input.is_key_pressed(KEY_W)))
     if mobile_controls != null and mobile_controls.move_vector.length() > 0.0:
         input_dir = mobile_controls.move_vector.normalized()
-
     var direction := (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
     if direction.length() > 0.0:
         velocity.x = direction.x * speed
@@ -65,7 +61,6 @@ func _physics_process(delta: float) -> void:
     else:
         velocity.x = move_toward(velocity.x, 0.0, speed)
         velocity.z = move_toward(velocity.z, 0.0, speed)
-
     move_and_slide()
 
 func throw_net() -> void:
