@@ -8,10 +8,47 @@ var origin := Vector3.ZERO
 var target := Vector3.ZERO
 var wait_time := 0.0
 var caught := false
+var rarity_name := "Обычный"
+var rarity_multiplier: int = 1
+var rarity_color := Color("e8e8e8")
 
 func _ready() -> void:
     origin = global_position
+    _roll_rarity()
     _pick_target()
+
+func _roll_rarity() -> void:
+    var roll := randf() * 100.0
+    if roll < 1.0:
+        rarity_name = "Мифический"
+        rarity_multiplier = 15
+        rarity_color = Color("ff4fd8")
+    elif roll < 4.0:
+        rarity_name = "Легендарный"
+        rarity_multiplier = 8
+        rarity_color = Color("ffb52e")
+    elif roll < 12.0:
+        rarity_name = "Эпический"
+        rarity_multiplier = 4
+        rarity_color = Color("b56cff")
+    elif roll < 32.0:
+        rarity_name = "Редкий"
+        rarity_multiplier = 2
+        rarity_color = Color("4da6ff")
+    else:
+        rarity_name = "Обычный"
+        rarity_multiplier = 1
+        rarity_color = Color("e8e8e8")
+    _update_name_label()
+
+func _update_name_label() -> void:
+    for child in get_children():
+        if child is Label3D:
+            child.text = "%s\n%s  x%d" % [creature_name, rarity_name, rarity_multiplier]
+            child.modulate = rarity_color
+            child.font_size = 16
+            child.outline_modulate = Color("20242b")
+            child.outline_size = 5
 
 func _physics_process(delta: float) -> void:
     if caught:
@@ -45,8 +82,8 @@ func catch_creature() -> void:
     caught = true
     var state = get_tree().current_scene.get_node_or_null("GameState")
     if state != null:
-        state.add_catch()
-    print("Пойман: ", creature_name)
+        state.add_catch(10 * rarity_multiplier)
+    print("Пойман: ", creature_name, " [", rarity_name, "] x", rarity_multiplier)
     _respawn_after_delay()
 
 func _respawn_after_delay() -> void:
@@ -60,4 +97,5 @@ func _respawn_after_delay() -> void:
     collision_mask = 1
     visible = true
     caught = false
+    _roll_rarity()
     _pick_target()
