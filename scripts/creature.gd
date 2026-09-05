@@ -12,19 +12,28 @@ var caught := false
 var rarity_name := "Обычный"
 var rarity_multiplier: int = 1
 var rarity_color := Color("e8e8e8")
+var mutation_name := ""
+var mutation_multiplier: int = 1
+var mutation_color := Color.WHITE
+var zone_multiplier: int = 1
+var zone_name := "Центр"
 var name_label: Label3D
+var player: CharacterBody3D
 
 func _ready() -> void:
     collision_layer = 4
     collision_mask = 1
     origin = global_position
+    player = get_tree().current_scene.get_node_or_null("Player") as CharacterBody3D
     _upgrade_collision()
     _ensure_name_label()
+    _detect_zone()
     _roll_rarity()
+    _roll_mutation()
+    _update_name_label()
     _pick_target()
 
 func _upgrade_collision() -> void:
-    # Also enlarges the original Cat Loaf hitbox from main.tscn.
     var collision := get_node_or_null("Collision") as CollisionShape3D
     if collision != null:
         var shape := CapsuleShape3D.new()
@@ -45,10 +54,26 @@ func _ensure_name_label() -> void:
     name_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
     name_label.no_depth_test = false
     name_label.fixed_size = false
-    name_label.pixel_size = 0.0032
+    name_label.pixel_size = 0.0027
+
+func _detect_zone() -> void:
+    var p := origin
+    if p.z < -23.0:
+        zone_name = "Руины"
+        zone_multiplier = 3
+    elif p.x > 14.0:
+        zone_name = "Скалы"
+        zone_multiplier = 2
+    elif p.x < -14.0:
+        zone_name = "Джунгли"
+        zone_multiplier = 2
+    else:
+        zone_name = "Центр"
+        zone_multiplier = 1
 
 func _roll_rarity() -> void:
-    var roll := randf() * 100.0
+    var bonus := float(zone_multiplier - 1) * 5.0
+    var roll := randf() * 100.0 - bonus
     if roll < 1.0:
         rarity_name = "Мифический"
         rarity_multiplier = 15
@@ -69,17 +94,44 @@ func _roll_rarity() -> void:
         rarity_name = "Обычный"
         rarity_multiplier = 1
         rarity_color = Color("e8e8e8")
-    _update_name_label()
+
+func _roll_mutation() -> void:
+    mutation_name = ""
+    mutation_multiplier = 1
+    mutation_color = Color.WHITE
+    var roll := randf() * 100.0
+    if roll < 2.0:
+        mutation_name = "Электро"
+        mutation_multiplier = 5
+        mutation_color = Color("62dfff")
+    elif roll < 6.0:
+        mutation_name = "Огненный"
+        mutation_multiplier = 3
+        mutation_color = Color("ff7043")
+    elif roll < 14.0:
+        mutation_name = "Золотой"
+        mutation_multiplier = 2
+        mutation_color = Color("ffd84a")
+    _apply_mutation_visual()
+
+func _apply_mutation_visual() -> void:
+    if mutation_name.is_empty():
+        return
+    for child in get_children():
+        if child is MeshInstance3D:
+            child.modulate = mutation_color
 
 func _update_name_label() -> void:
     if name_label == null:
         return
-    name_label.text = "%s\n%s  •  x%d" % [creature_name, rarity_name, rarity_multiplier]
-    name_label.modulate = rarity_color
-    name_label.font_size = 24
+    var extra := ""
+    if not mutation_name.is_empty():
+        extra = "  %s x%d" % [mutation_name, mutation_multiplier]
+    name_label.text = "%s\n%s x%d%s" % [creature_name, rarity_name, rarity_multiplier, extra]
+    name_label.modulate = mutation_color if not mutation_name.is_empty() else rarity_color
+    name_label.font_size = 22
     name_label.outline_modulate = Color("161b22")
     name_label.outline_size = 4
-    name_label.pixel_size = 0.0032
 
 func can_be_caught(net_level: int) -> bool:
     return net_level >= required_net_level and not caught
@@ -89,19 +141,36 @@ func _physics_process(delta: float) -> void:
         return
     if not is_on_floor():
         velocity += get_gravity() * delta
-    var flat_target := Vector3(target.x, global_position.y, target.z)
-    var direction := global_position.direction_to(flat_target)
-    if global_position.distance_to(flat_target) > 0.6:
-        velocity.x = direction.x * wander_speed
-        velocity.z = direction.z * wander_speed
-        if direction.length() > 0.1:
-            rotation.y = atan2(direction.x, direction.z)
-    else:
-        velocity.x = 0.0
-        velocity.z = 0.0
-        wait_time -= delta
-        if wait_time <= 0.0:
-            _pick_target()
+
+    var fleeing := false
+    if player != null:
+        var distance_to_player := global_position.distance_to(player.global_position)
+        var notice_distance := 4.0 + float(rarity_multiplier) * 0.35
+        if rarity_multiplier >= 2 and distance_to_player < notice_distance:
+            fleeing = true
+            var away := player.global_position.direction_to(global_position)
+            away.y = 0.0
+            away = away.normalized()
+            var flee_bonus := 1.25 + min(float(rarity_multiplier) * 0.06, 0.8)
+            velocity.x = away.x * wander_speed * flee_bonus
+            velocity.z = away.z * wander_speed * flee_bonus
+            if away.length() > 0.1:
+                rotation.y = atan2(away.x, away.z)
+
+    if not fleeing:
+        var flat_target := Vector3(target.x, global_position.y, target.z)
+        var direction := global_position.direction_to(flat_target)
+        if global_position.distance_to(flat_target) > 0.6:
+            velocity.x = direction.x * wander_speed
+            velocity.z = direction.z * wander_speed
+            if direction.length() > 0.1:
+                rotation.y = atan2(direction.x, direction.z)
+        else:
+            velocity.x = 0.0
+            velocity.z = 0.0
+            wait_time -= delta
+            if wait_time <= 0.0:
+                _pick_target()
     move_and_slide()
 
 func _pick_target() -> void:
@@ -115,9 +184,10 @@ func catch_creature(net_level: int = 1) -> bool:
         return false
     caught = true
     var state = get_tree().current_scene.get_node_or_null("GameState")
+    var value := 10 * rarity_multiplier * mutation_multiplier * zone_multiplier
     if state != null:
-        state.add_catch(10 * rarity_multiplier)
-    print("Пойман: ", creature_name, " [", rarity_name, "] x", rarity_multiplier)
+        state.add_catch(value)
+    print("Пойман: ", creature_name, " [", rarity_name, "] ", mutation_name, " = ", value)
     _respawn_after_delay()
     return true
 
@@ -133,4 +203,6 @@ func _respawn_after_delay() -> void:
     visible = true
     caught = false
     _roll_rarity()
+    _roll_mutation()
+    _update_name_label()
     _pick_target()
