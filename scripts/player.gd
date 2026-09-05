@@ -69,6 +69,9 @@ func _physics_process(delta: float) -> void:
 func throw_net() -> void:
     var net = net_scene.instantiate()
     get_tree().current_scene.add_child(net)
+    var state = get_tree().current_scene.get_node_or_null("GameState")
+    if state != null:
+        net.net_level = state.net_level
     var aim_direction := -camera.global_transform.basis.z.normalized()
     net.global_position = camera.global_position + aim_direction * 1.5
     net.direction = aim_direction
