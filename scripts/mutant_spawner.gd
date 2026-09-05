@@ -43,12 +43,13 @@ func make_mutant(name_: String, pos: Vector3, body_color: String, accent_color: 
     body.set("wander_radius", 4.5)
     body.set("required_net_level", required_level)
 
+    # Generous catch hitbox: aiming should feel fun, not pixel-perfect.
     var collision := CollisionShape3D.new()
     var shape := CapsuleShape3D.new()
-    shape.radius = 0.6
-    shape.height = 1.3
+    shape.radius = 1.05
+    shape.height = 2.25
     collision.shape = shape
-    collision.position.y = 0.65
+    collision.position.y = 0.8
     body.add_child(collision)
 
     var main := mat(body_color)
@@ -96,13 +97,23 @@ func spawn_all() -> void:
     marker.name = "ExtraMutantsSpawned"
     root.add_child(marker)
 
-    await get_tree().create_timer(5.0).timeout
+    await get_tree().create_timer(2.0).timeout
     make_mutant("Бананчик", Vector3(-10,1.0,-5), "f2cf43", "7abf45", 0, 2.0, 1)
-    await get_tree().create_timer(5.0).timeout
+    await get_tree().create_timer(2.0).timeout
     make_mutant("Краб Бандит", Vector3(10,1.0,-5), "dc5847", "8e2e32", 1, 2.7, 2)
-    await get_tree().create_timer(5.0).timeout
+    await get_tree().create_timer(2.0).timeout
     make_mutant("Жабыч Турбо", Vector3(-11,1.0,10), "56b84b", "2d7693", 2, 4.2, 2)
-    await get_tree().create_timer(5.0).timeout
+    await get_tree().create_timer(2.0).timeout
     make_mutant("Акулыч на ножках", Vector3(11,1.0,10), "5a91ad", "e5c28c", 3, 3.4, 3)
-    await get_tree().create_timer(5.0).timeout
+    await get_tree().create_timer(2.0).timeout
     make_mutant("Кокосыч", Vector3(13,1.0,0), "825435", "55a645", 4, 1.7, 1)
+    await get_tree().create_timer(2.0).timeout
+    make_mutant("Голубь Геннадий", Vector3(-13,1.0,2), "9aa7b2", "dfe8ef", 0, 3.1, 1)
+    await get_tree().create_timer(2.0).timeout
+    make_mutant("Лимоныч", Vector3(5,1.0,-13), "e8d936", "79ad42", 2, 2.8, 2)
+    await get_tree().create_timer(2.0).timeout
+    make_mutant("Осьминог Петрович", Vector3(-5,1.0,-13), "b55bd4", "e889c7", 1, 3.5, 2)
+    await get_tree().create_timer(2.0).timeout
+    make_mutant("Каменный Дед", Vector3(15,1.0,-9), "737d80", "b2aaa0", 4, 1.25, 3)
+    await get_tree().create_timer(2.0).timeout
+    make_mutant("Арбузавр", Vector3(-15,1.0,-9), "3d9c55", "e14e4e", 3, 4.0, 3)
